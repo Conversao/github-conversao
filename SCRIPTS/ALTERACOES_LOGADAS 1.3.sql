@@ -43,4 +43,5 @@ db2 "IMPORT FROM C:\TEMP\ALTERACOES_LOGADAS.TXT OF DEL MODIFIED BY CHARDEL'''' I
         - 20/08/2018 -          | Ultima alteração;
         - 31/01/2020 - 1.2      | Ajuste nas variáveis e descrições. Alteração na data que deve ser informada, pois validando com analista contábil Mauricio Rodrigues (e ele validando com Gabriela Vitto Cecchin), a data de inserção desta informação precisa ser posterior a data de cadastro do produto e precisa ser uma data em que o SPED será apurado pelo CISSPoder;
         - 24/09/2020 - 1.3      | Adição de CASE para inserir na coluna CODIGO2 apenas números válidos do range integer.
+		- 14/09/2021 - 			| Adcionado ao github
 */
