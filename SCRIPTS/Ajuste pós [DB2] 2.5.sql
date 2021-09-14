@@ -2184,5 +2184,5 @@ GO
         - 12/05/2021 - 2.3      | Alterado ajustes de enters para rodar em estrutura de loop;
         - 15/07/2021 - 2.4      | Adição de novas colunas na seção "Sem registro na POLITICA_PRECO_PRODUTO" para evitar deixar campos nulos, da mesma forma como o CISSPoder faz o insert na tabela.
         - 27/07/2021 - 2.5      | Criada a seção "Sem registro na ESTOQUE_SALDO_ATUAL" para inserir registros zerados de todos os produtos, todas as empresas e todos os locais de estoque quando ainda não existam nesta tabela, a partir do que Michel Guilherme Da Rold Silva informou que o sistema necessita desta informação devido algum problema relacionado a avaria ou devolução (algo neste sentido) para futuras releaseses do sistema iriam adicionar um insert para que quando o produto for cadastrado ele inserir esses registros.
-
+		- 14/09/2021 - 			| Adcionado ao github
 */
