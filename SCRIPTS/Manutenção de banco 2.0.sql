@@ -4,18 +4,18 @@
 
 select DATE(stats_time) DATE , count(*) COUNT from syscat.tables where TYPE = 'T' group by DATE(stats_time) ORDER BY DATE(stats_time)
 
--- EstatÌsticas em todas as tabelas
+-- Estat√≠sticas em todas as tabelas
 select 'db2 "RUNSTATS ON TABLE '||trim(TABSCHEMA)||'.'||trim(TABNAME)||' ON ALL COLUMNS WITH DISTRIBUTION ON ALL COLUMNS AND INDEXES ALL ALLOW WRITE ACCESS"' " " from syscat.tables where TYPE = 'T' order by npages desc
 db2 -x "select 'RUNSTATS ON TABLE '||rtrim(TABSCHEMA)||'.'||rtrim(TABNAME)|| ' ON ALL COLUMNS WITH DISTRIBUTION ON ALL COLUMNS AND INDEXES ALL ALLOW WRITE ACCESS;' from SYSCAT.TABLES where TYPE = 'T' order by npages desc" > updstat.sql
 db2 -tvf updstat.sql
 
--- EstatÌsticas em tabelas cuja EstatÌstica foi atualizada anterior a data de hoje
+-- Estat√≠sticas em tabelas cuja Estat√≠stica foi atualizada anterior a data de hoje
 select 'db2 "RUNSTATS ON TABLE '||trim(TABSCHEMA)||'.'||trim(TABNAME)||' ON ALL COLUMNS WITH DISTRIBUTION ON ALL COLUMNS AND INDEXES ALL ALLOW WRITE ACCESS"' " " from syscat.tables where TYPE = 'T' and stats_time is null or stats_time < TODAY() order by npages desc
 db2 -x "select 'RUNSTATS ON TABLE '||rtrim(TABSCHEMA)||'.'||rtrim(TABNAME)|| ' ON ALL COLUMNS WITH DISTRIBUTION ON ALL COLUMNS AND INDEXES ALL ALLOW WRITE ACCESS;' from SYSCAT.TABLES where TYPE = 'T' and stats_time is null or stats_time < TODAY() order by npages desc" > updstat.sql
 db2 -tvf updstat.sql
 
 
-        -- EstatÌstica em tabelas com nome mÌnusculo (Exemplo)
+        -- Estat√≠stica em tabelas com nome m√≠nusculo (Exemplo)
         call admin_cmd('RUNSTATS ON TABLE NFE."schema_version" ON ALL COLUMNS WITH DISTRIBUTION ON ALL COLUMNS AND INDEXES ALL ALLOW WRITE ACCESS')
 
 
@@ -41,7 +41,7 @@ SELECT 'db2 "REBIND PACKAGE '||TRIM(PKGSCHEMA)||'.'||TRIM(PKGNAME)||'"' as " " F
 db2 -x "SELECT 'REBIND PACKAGE '||TRIM(pkgschema)||'.'||PKGNAME||';' FROM SYSCAT.PACKAGES" > reb.sql
 db2 -tvf reb.sql
 
--- Rebind em pacotes corrompidos (Inv·lidos)
+-- Rebind em pacotes corrompidos (Inv√°lidos)
 SELECT 'db2 "REBIND PACKAGE '||TRIM(PKGSCHEMA)||'.'||TRIM(PKGNAME)||'"' as " " FROM SYSCAT.PACKAGES WHERE VALID <> 'Y'
 db2 -x "SELECT 'REBIND PACKAGE '||TRIM(pkgschema)||'.'||PKGNAME||';' FROM SYSCAT.PACKAGES WHERE VALID <> 'Y'" > reb.sql
 db2 -tvf reb.sql
@@ -59,7 +59,7 @@ db2 -tvf reb.sql
 select * from syscat.tables where status = 'C'
 
 -- Integridade pendente
-select 'db2 "set integrity for '||tabname||' all immediate unchecked"' as " "from syscat.tables where status = 'C'
+select 'db2 "set integrity for '||ltrim(rtrim(tabschema))||'.'||tabname||' all immediate unchecked"' as " "from syscat.tables where status = 'C'
 db2 "SELECT CAST('SET INTEGRITY FOR '||rtrim(tabschema)||'.'||rtrim(tabname)||' ALL IMMEDIATE UNCHECKED;' AS CHAR(160)) as CMD from syscat.tables WHERE type='T' AND status='C'" > setint.sql
 db2 -tvf setint.sql
 
@@ -71,10 +71,10 @@ db2 -tvf setint.sql
 -- Empresa
 SELECT * FROM DBA.EMPRESA
 
--- Vers„o do banco
+-- Vers√£o do banco
 select * from sysibm.sysversions order by version_timestamp
 
--- Erros de atualizaÁ„o de banco
+-- Erros de atualiza√ß√£o de banco
 SELECT COUNT(*) FROM LOG_ATUALIZACAO_CMD        WHERE RETORNOCATALOGADO <> 'T'
 SELECT COUNT(*) FROM STATUS_OBJETOS             WHERE TIPOSTATUS <> 'C'
 SELECT COUNT(*) FROM STATUS_OBJETOS_UPGRADE     WHERE TIPOSTATUS <> 'C'
