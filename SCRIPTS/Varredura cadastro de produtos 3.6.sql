@@ -524,7 +524,7 @@ WITH PRODUTO_VALIDACAO AS  (
                            SELECT
                                 COUNT(*) Total,
                                 'Relacionamento de Produto com Fornecedor | Mesmo fornecedor com código interno do fornecedor igual para mais de um produto;' AS Descricao,
-                                'SELECT  A.IDCLIFOR, C.CNPJCPF, C.NOME , A.CODIGOINTERNOFORN, A.IDSUBPRODUTO, D.IDCODBARPROD , D.DESCRRESPRODUTO FROM    DBA.PRODUTO_FORNECEDOR  A, DBA.CLIENTE_FORNECEDOR  C , DBA.PRODUTO_GRADE       D WHERE   D.FLAGINATIVO           = ''F'' AND C.IDCLIFOR              = A.IDCLIFOR AND D.IDSUBPRODUTO          = A.IDSUBPRODUTO AND EXISTS                     (    SELECT  1 FROM    PRODUTO_FORNECEDOR      B WHERE   B.CODIGOINTERNOFORN     IS NOT NULL AND B.CODIGOINTERNOFORN     = A.CODIGOINTERNOFORN AND B.IDCLIFOR              = A.IDCLIFOR AND B.IDSUBPRODUTO          IN(     SELECT  E.IDSUBPRODUTO FROM    DBA.PRODUTO_GRADE       E WHERE   E.FLAGINATIVO           = ''F'' ) GROUP BY B.CODIGOINTERNOFORN , B.IDCLIFOR HAVING COUNT(*) > 1 ) ORDER BY A.CODIGOINTERNOFORN, A.IDCLIFOR' AS QUERY
+                                'SELECT  A.IDCLIFOR, C.CNPJCPF, C.NOME , A.CODIGOINTERNOFORN, A.IDSUBPRODUTO, D.IDCODBARPROD , D.DESCRRESPRODUTO FROM    DBA.PRODUTO_FORNECEDOR  A, DBA.CLIENTE_FORNECEDOR  C , DBA.PRODUTO_GRADE       D WHERE   D.FLAGINATIVO           = ''F'' AND C.IDCLIFOR              = A.IDCLIFOR AND D.IDSUBPRODUTO          = A.IDSUBPRODUTO AND EXISTS                     (    SELECT  1 FROM    DBA.PRODUTO_FORNECEDOR      B WHERE   B.CODIGOINTERNOFORN     IS NOT NULL AND LTRIM(RTRIM(B.CODIGOINTERNOFORN)) <> '''' AND B.CODIGOINTERNOFORN     = A.CODIGOINTERNOFORN AND B.IDCLIFOR              = A.IDCLIFOR AND B.IDSUBPRODUTO          IN(     SELECT  E.IDSUBPRODUTO FROM    DBA.PRODUTO_GRADE       E WHERE   E.FLAGINATIVO           = ''F'' ) GROUP BY B.CODIGOINTERNOFORN , B.IDCLIFOR HAVING COUNT(*) > 1 ) ORDER BY A.CODIGOINTERNOFORN, A.IDCLIFOR' AS QUERY
                            FROM
                                 DBA.PRODUTO_FORNECEDOR  A,
                                 DBA.CLIENTE_FORNECEDOR  C ,
@@ -534,14 +534,15 @@ WITH PRODUTO_VALIDACAO AS  (
                                 C.IDCLIFOR              = A.IDCLIFOR AND
                                 D.IDSUBPRODUTO          = A.IDSUBPRODUTO AND
                                 EXISTS                     (    SELECT  1
-                                                                FROM    PRODUTO_FORNECEDOR      B
-                                                                WHERE   B.CODIGOINTERNOFORN     IS NOT NULL AND
-                                                                        B.CODIGOINTERNOFORN     = A.CODIGOINTERNOFORN AND
-                                                                        B.IDCLIFOR              = A.IDCLIFOR AND
-                                                                        B.IDSUBPRODUTO          IN(     SELECT  E.IDSUBPRODUTO
-                                                                                                        FROM    DBA.PRODUTO_GRADE       E
-                                                                                                        WHERE   E.FLAGINATIVO           = 'F'
-                                                                                                  )
+                                                                FROM    DBA.PRODUTO_FORNECEDOR                  B
+                                                                WHERE   B.CODIGOINTERNOFORN                     IS NOT NULL AND
+                                                                        LTRIM(RTRIM(B.CODIGOINTERNOFORN))       <> '' AND
+                                                                        B.CODIGOINTERNOFORN                     = A.CODIGOINTERNOFORN AND
+                                                                        B.IDCLIFOR                              = A.IDCLIFOR AND
+                                                                        B.IDSUBPRODUTO                          IN(     SELECT  E.IDSUBPRODUTO
+                                                                                                                        FROM    DBA.PRODUTO_GRADE       E
+                                                                                                                        WHERE   E.FLAGINATIVO           = 'F'
+                                                                                                                )
                                                                         GROUP BY B.CODIGOINTERNOFORN , B.IDCLIFOR
                                                                         HAVING COUNT(*) > 1
                                                            )
@@ -1678,6 +1679,7 @@ FROM
         - 30/06/2020 - 3.5      | Criada a validação "Balança | Produtos com dias de validade porém "Imprime data de embalagem na etiqueta" desmarcado;";
         - 26/08/2021 - 3.6      | Correção na query "Balanço | Produtos lançados no balanço sem custo informado;";
         - 17/09/2021 - 3.7      | Criadas diversas validações de inconsistências em preços promocionais.
+        - 09/02/2022 - 3.8      | Ajuste em "Relacionamento de Produto com Fornecedor | Mesmo fornecedor com código interno do fornecedor igual para mais de um produto;" desconsiderando código interno do fornecedor em branco.
 
  * Melhorias e correções para aplicar
         - Criar uma coluna para classificar entre "Inconsistência" e "Informativo";
